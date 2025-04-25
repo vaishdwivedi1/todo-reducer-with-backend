@@ -10,7 +10,7 @@ interface Todo {
   _id: string;
   task: string;
   name: string;
-  isCompleted: boolean;
+  completed: boolean;
   createdAt: string;
   updatedAt?: string;
   __v?: number;
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
         {
           name: localStorage.getItem("name"),
           task: updatedFields?.task ?? todoToUpdate.task,
-          isCompleted: updatedFields?.isCompleted ?? todoToUpdate.isCompleted,
+          isCompleted: updatedFields?.completed ?? todoToUpdate.completed,
         }
       );
       const updated = [...todos];
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
                 type="checkbox"
                 checked={todo.completed}
                 onChange={() =>
-                  handleEdit(index, { isCompleted: !todo.completed })
+                  handleEdit(index, { completed: !todo.completed })
                 }
               />
               {editIndex === index ? (
@@ -98,7 +98,7 @@ const Home: React.FC = () => {
               ) : (
                 <span
                   className={`${
-                    todo.isCompleted ? "line-through text-gray-400" : ""
+                    todo.completed ? "line-through text-gray-400" : ""
                   }`}
                 >
                   {todo.task}
