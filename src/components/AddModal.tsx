@@ -2,6 +2,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 // Define the structure of a Todo item
 interface Todo {
@@ -28,23 +29,25 @@ const AddModal: React.FC<AddModalProps> = ({
 
   // Handles the creation of a new todo
   const handleAdd = async () => {
-    // Prevent adding empty or whitespace-only tasks
     if (!newTodo.trim()) return;
 
     try {
-      const res = await axios.post("https://todo-one-orpin.vercel.app/createTodo", {
-        name: localStorage.getItem("name"),
-        task: newTodo,
-      });
+      const res = await axios.post(
+        "https://todo-one-orpin.vercel.app/createTodo",
+        {
+          name: localStorage.getItem("name"),
+          task: newTodo,
+        }
+      );
 
-      // Update the list of todos with the newly created one
       setTodos((prev) => [...prev, res.data.data]);
-
-      // Reset input field and close the modal
       setNewTodo("");
       setShowAddModal(false);
+
+      toast.success("Todo added successfully!"); // ✅ success toast
     } catch (err) {
       console.error("Error adding todo:", err);
+      toast.error("Failed to add todo. Please try again."); // ❌ error toast
     }
   };
 

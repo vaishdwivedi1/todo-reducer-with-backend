@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 // Define the structure of a Todo item
 interface Todo {
@@ -34,7 +35,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 
     try {
       const todoToDelete = todos[deleteIndex];
-      
+
       // Make DELETE request to the API with todo ID and user name
       await axios.delete(
         `https://todo-one-orpin.vercel.app/deleteTodo/${todoToDelete._id}`,
@@ -49,8 +50,11 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       // Close the modal and reset the index
       setShowDeleteModal(false);
       setDeleteIndex(null);
+
+      toast.success("Todo deleted successfully!"); // ✅ Success toast
     } catch (err) {
       console.error("Error deleting todo:", err);
+      toast.error("Failed to delete todo. Please try again."); // ❌ Error toast
     }
   };
 

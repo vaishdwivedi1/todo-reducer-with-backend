@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AddModal from "../components/AddModal";
 import DeleteModal from "../components/DeleteModal";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // Define the Todo structure
 interface Todo {
@@ -40,30 +41,34 @@ const Home: React.FC = () => {
           isCompleted: updatedFields?.completed ?? todoToUpdate.completed,
         }
       );
+
       const updated = [...todos];
       updated[index] = res.data.data;
       setTodos(updated);
       setEditIndex(null);
       setEditText("");
+
+      toast.success("Todo updated successfully!"); // ✅ Success toast
     } catch (err) {
       console.error("Error updating todo:", err);
+      toast.error("Failed to update todo. Please try again."); // ❌ Error toast
     }
   };
 
+  const fetchTodos = async () => {
+    try {
+      const res = await axios.get(
+        `https://todo-one-orpin.vercel.app/getAllTodos?name=${localStorage.getItem(
+          "name"
+        )}`
+      );
+      setTodos(res.data.data);
+    } catch (err) {
+      console.error("Error fetching todos:", err);
+      toast.error("Failed to fetch todos. Please check your connection.");
+    }
+  };
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const res = await axios.get(
-          `https://todo-one-orpin.vercel.app/getAllTodos?name=${localStorage.getItem(
-            "name"
-          )}`
-        );
-        setTodos(res.data.data);
-      } catch (err) {
-        console.error("Error fetching todos:", err);
-      }
-    };
-
     fetchTodos();
   }, []);
 
